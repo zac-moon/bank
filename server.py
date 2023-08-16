@@ -3,7 +3,7 @@ import datetime
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-server_address = ('192.168.1.71', 12345)
+server_address = (scoket.gethostname(), 12345)
 server_socket.bind(server_address)
 server_socket.listen(1)
 
