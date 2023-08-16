@@ -5,5 +5,6 @@ Using plaintext files rather than SQL database because of SQL Download System re
 
 ## RUN SERVER.PY THEN CLIENT.PY. YOU CAN USE LOGIN 
 __guest__
+
 __password123__
 ## CASE SENSITIVE
