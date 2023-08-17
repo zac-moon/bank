@@ -9,8 +9,31 @@ client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_address = (socket.gethostname(), 12345)
 client_socket.connect(server_address)
 
-def main():
+def main(username,password):
     print('Logged IN')
+    print(username)
+    print(password)
+    usernameEntry.delete(0,tk.END)
+    passwordEntry.delete(0,tk.END
+    )
+    client = tk.Toplevel(root)
+    client.title(f'ZBANK LINK - {username}')
+    client.geometry('800x600')
+
+    def Balance():
+        client_socket.send(f'balance.{username}'.encode('utf-8'))
+        balance = client_socket.recv(1024)
+        balance = balance.decode('utf-8')
+        return balance
+
+    clientTitle = tk.Label(client, text=f"ZBANK LINK - {username}")
+    balance = Balance()
+    balanceLabel = tk.Label(client,text=f"£{balance}")
+
+
+    clientTitle.pack()
+    balanceLabel.pack()
+
 def login():
     username = usernameEntry.get()
     password = passwordEntry.get()
@@ -22,7 +45,7 @@ def login():
     if resp == "1":
         login = True
         print('Correct Details')
-        
+        main(username,password)
     elif resp == "0":
         print('Account Not Found')    
     else:

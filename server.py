@@ -10,11 +10,15 @@ server_socket.listen(1)
 print('Server is listening on', server_address)
 
 while True:
-    print('Waiting for a connection...')
+    current_datetime = datetime.datetime.now()
+    formatted_datetime = current_datetime.strftime('%H:%M %d.%m.%Y')
+    print(f'{formatted_datetime} | (                     ) | Waiting for a connection...')
     client_socket, client_address = server_socket.accept()
 
     try:
-        print('Connection from', client_address)
+        current_datetime = datetime.datetime.now()
+        formatted_datetime = current_datetime.strftime('%H:%M %d.%m.%Y')
+        print(f"{formatted_datetime} | {client_address} | Connected")
         while True:
             data = client_socket.recv(1024)
             if data:
@@ -79,7 +83,9 @@ while True:
                         client_socket.send('To Account Not Found'.encode('utf-8'))
                     client_socket.send('Transfer Successful'.encode('utf-8'))
             else:
-                print(f"{client_address} disconnected.")
+                current_datetime = datetime.datetime.now()
+                formatted_datetime = current_datetime.strftime('%H:%M %d.%m.%Y')
+                print(f"{formatted_datetime} | {client_address} | Disconnected")
                 break
     finally:
         client_socket.close()
