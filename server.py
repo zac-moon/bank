@@ -23,13 +23,19 @@ while True:
             data = client_socket.recv(1024)
             if data:
                 data = data.decode('utf-8')
+                datas = data.split('.')
+                cmd = datas[0]
 
                 current_datetime = datetime.datetime.now()
                 formatted_datetime = current_datetime.strftime('%H:%M %d.%m.%Y')
-                print(f'{formatted_datetime} | {client_address} | {data}')
+                try:
+                    if datas[2]=="upd":
+                        pass
+                    else:
+                        print(f'{formatted_datetime} | {client_address} | {data}')
+                except IndexError:
+                    print(f'{formatted_datetime} | {client_address} | {data}')
 
-                datas = data.split('.')
-                cmd = datas[0]
 
                 if cmd == 'login':
                     username = datas[1]
