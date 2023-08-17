@@ -9,59 +9,51 @@ client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_address = (socket.gethostname(), 12345)
 client_socket.connect(server_address)
 
-def main(username,password):
-    print('Logged IN')
-    print(username)
-    print(password)
-    usernameEntry.delete(0,tk.END)
-    passwordEntry.delete(0,tk.END
-    )
+def main(username):
+    def balance():
+        client_socket.send(f'balance.{username}'.encode('utf-8'))
+        balance = client_socket.recv(1024).decode('utf-8')
+        return balance
+
+    def transfer():
+        pass
+
     client = tk.Toplevel(root)
     client.title(f'ZBANK LINK - {username}')
     client.geometry('800x600')
 
-    def Balance():
-        client_socket.send(f'balance.{username}'.encode('utf-8'))
-        balance = client_socket.recv(1024)
-        balance = balance.decode('utf-8')
-        return balance
+    client_title = tk.Label(client, text=f"ZBANK LINK - {username}")
+    balance_label = tk.Label(client, text=f"BALANCE : £{balance()}", font=('Arial', 90))
+    transfer_btn = tk.Button(client, text="TRANSFER", command=transfer)
 
-    clientTitle = tk.Label(client, text=f"ZBANK LINK - {username}")
-    balance = Balance()
-    balanceLabel = tk.Label(client,text=f"BALANCE : £{balance}",font=('Arial',90))
-
-
-    clientTitle.pack()
-    balanceLabel.pack()
+    client_title.pack()
+    balance_label.pack()
+    transfer_btn.pack()
 
 def login():
-    username = usernameEntry.get()
-    password = passwordEntry.get()
-    print(username)
-    print(password)
+    username = username_entry.get()
+    password = password_entry.get()
     client_socket.send(f'login.{username}.{password}'.encode('utf-8'))
-    resp = client_socket.recv(1024)
-    resp = resp.decode('utf-8')
+    resp = client_socket.recv(1024).decode('utf-8')
     if resp == "1":
-        login = True
         print('Correct Details')
-        main(username,password)
+        main(username)
     elif resp == "0":
-        print('Account Not Found')    
+        print('Account Not Found')
     else:
         print('Password Incorrect')
 
-mainTitle = tk.Label(root, text="ZBANK LINK - LOGIN", font=('Arial', 40))
-usernameLabel = tk.Label(root, text='Username:')
-usernameEntry = tk.Entry(root)
-passwordLabel = tk.Label(root, text="Password:")
-passwordEntry = tk.Entry(root, show="*") 
-loginBtn = tk.Button(root, text="Login", command=login)
+main_title = tk.Label(root, text="ZBANK LINK - LOGIN", font=('Arial', 40))
+username_label = tk.Label(root, text='Username:')
+username_entry = tk.Entry(root)
+password_label = tk.Label(root, text="Password:")
+password_entry = tk.Entry(root, show="*")
+login_btn = tk.Button(root, text="Login", command=login)
 
-mainTitle.pack()
-usernameLabel.pack()
-usernameEntry.pack()
-passwordLabel.pack()
-passwordEntry.pack()
-loginBtn.pack()
+main_title.pack()
+username_label.pack()
+username_entry.pack()
+password_label.pack()
+password_entry.pack()
+login_btn.pack()
 root.mainloop()
