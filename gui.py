@@ -1,9 +1,12 @@
 import tkinter as tk
 import socket
-
+from ttkthemes import ThemedStyle
 root = tk.Tk()
 root.title('ZBANK LINK - LOGIN')
 root.geometry('800x600')
+
+style = ThemedStyle(root)
+style.set_theme("radiance")
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_address = ('192.168.1.71', 12345)
@@ -62,7 +65,7 @@ def main(username):
         confLabel.pack()
     
     def update_balance(rast):
-        balance_label.config(text=f"BALANCE : £{balance('upd')}")
+        balance_label.config(text=f"£{balance('upd')}")
         client.after(200, update_balance, rast + 1)
         print('bal', rast)
 
@@ -70,16 +73,14 @@ def main(username):
         client_socket.send(f'logout.{username}'.encode('utf-8'))
         client.destroy()
 
-    client = tk.Toplevel(root)
+    client = tk.Toplevel()
     client.title(f'ZBANK LINK - {username}')
     client.geometry('800x600')
 
-    client_title = tk.Label(client, text=f"ZBANK LINK - {username}")
     balance_label = tk.Label(client, text=f"£{balance('start')}", font=('Arial', 90))
     transfer_btn = tk.Button(client, text="Transfer", command=transfer, height=6,width=10)
     logout_btn = tk.Button(client, text="Log Out", command=logout,height=6,width=10)
 
-    client_title.pack()
     balance_label.pack()
     transfer_btn.pack()
     logout_btn.pack()
@@ -99,6 +100,7 @@ def login():
         print('Account Not Found')
     else:
         print('Password Incorrect')
+
 
 main_title = tk.Label(root, text="ZBANK LINK - LOGIN", font=('Arial', 40))
 username_label = tk.Label(root, text='Username:')
