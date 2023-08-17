@@ -28,7 +28,7 @@ def main(username,password):
 
     clientTitle = tk.Label(client, text=f"ZBANK LINK - {username}")
     balance = Balance()
-    balanceLabel = tk.Label(client,text=f"£{balance}")
+    balanceLabel = tk.Label(client,text=f"BALANCE : £{balance}",font=('Arial',90))
 
 
     clientTitle.pack()
