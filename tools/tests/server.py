@@ -1,9 +1,24 @@
 import socket
 import datetime
-import threading
 
-def handle_client(client_socket, client_address):
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+server_address = (socket.gethostname(), 12345)
+server_socket.bind(server_address)
+server_socket.listen(1)
+
+print('Server is listening on', server_address)
+
+while True:
+    current_datetime = datetime.datetime.now()
+    formatted_datetime = current_datetime.strftime('%H:%M %d.%m.%Y')
+    print(f'{formatted_datetime} | (                     ) | Waiting for a connection...')
+    client_socket, client_address = server_socket.accept()
+
     try:
+        current_datetime = datetime.datetime.now()
+        formatted_datetime = current_datetime.strftime('%H:%M %d.%m.%Y')
+        print(f"{formatted_datetime} | {client_address} | Connected")
         while True:
             data = client_socket.recv(1024)
             if data:
@@ -20,6 +35,7 @@ def handle_client(client_socket, client_address):
                         print(f'{formatted_datetime} | {client_address} | {data}')
                 except IndexError:
                     print(f'{formatted_datetime} | {client_address} | {data}')
+
 
                 if cmd == 'login':
                     username = datas[1]
@@ -51,6 +67,7 @@ def handle_client(client_socket, client_address):
                         amount = '0'
 
                     amount = int(amount)
+
                     to = datas[3]
                     frompath = f'db/balance/{froms}.txt'
                     topath = f'db/balance/{to}.txt'
@@ -82,31 +99,13 @@ def handle_client(client_socket, client_address):
                         newbal = str(newbal)
                         with open(frompath, 'w') as file:
                             file.write(newbal)
-                            client_socket.send('To Account Not Found'.encode('utf-8'))
+                        client_socket.send('To Account Not Found'.encode('utf-8'))
 
-                            client_socket.send('Transfer Successful'.encode('utf-8'))
+                    client_socket.send('Transfer Successful'.encode('utf-8'))
             else:
                 current_datetime = datetime.datetime.now()
                 formatted_datetime = current_datetime.strftime('%H:%M %d.%m.%Y')
                 print(f"{formatted_datetime} | {client_address} | Disconnected")
                 break
-    except Exception as e:
-        print(f"Error handling client: {e}")
     finally:
         client_socket.close()
-
-if __name__ == "__main__":
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_address = (socket.gethostname(), 12345)
-    server_socket.bind(server_address)
-    server_socket.listen(5)
-    print('Server is listening on', server_address)
-
-    while True:
-        current_datetime = datetime.datetime.now()
-        formatted_datetime = current_datetime.strftime('%H:%M %d.%m.%Y')
-        print(f'{formatted_datetime} | (                     ) | Waiting for a connection...')
-        client_socket, client_address = server_socket.accept()
-
-        client_thread = threading.Thread(target=handle_client, args=(client_socket, client_address))
-        client_thread.start()
