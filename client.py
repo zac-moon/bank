@@ -2,7 +2,11 @@ import socket
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
+<<<<<<< HEAD
 server_address = (, 12345)
+=======
+server_address = ('192.168.1.71', 12345)
+>>>>>>> c7e062b63835ee4e585ccc74a5f10406348bc0b1
 client_socket.connect(server_address)
 login = False
 
