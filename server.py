@@ -86,7 +86,15 @@ while True:
                         with open(topath, 'w') as file:
                             file.write(newbal)
                     except FileNotFoundError:
+                        with open(frompath) as file:
+                            curin = file.read().strip()
+                        curin = int(curin)
+                        newbal = curin + amount
+                        newbal = str(newbal)
+                        with open(frompath, 'w') as file:
+                            file.write(newbal)
                         client_socket.send('To Account Not Found'.encode('utf-8'))
+
                     client_socket.send('Transfer Successful'.encode('utf-8'))
             else:
                 current_datetime = datetime.datetime.now()

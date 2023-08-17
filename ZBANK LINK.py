@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter import ttk
 import socket
 
 root = tk.Tk()
@@ -25,9 +24,40 @@ def main(username):
         transferwin = tk.Toplevel(client)
         transferwin.title("ZBANK LINK- TRANSFER")
         transferwin.geometry('400x400')
-        traTitle = tk.Label(transferwin, text='Transfer Money')
 
+        traTitle = tk.Label(transferwin, text='Transfer Money')
+        toLabel = tk.Label(transferwin, text='Enter Account Username to transfer to: ')
+        toEntry = tk.Entry(transferwin)
+        amountLabel = tk.Label(transferwin, text='Amount to transfer :')
+        amountEntry = tk.Entry(transferwin) 
+
+        def trTransfer():
+            print('transfer')
+            to = toEntry.get()
+            amount = amountEntry.get()
+
+            client_socket.send(f'transfer.{username}.{amount}.{to}'.encode('utf-8'))
+            conf = client_socket.recv(1024)
+            conf = conf.decode('utf-8')
+            print(conf)
+            if conf == "Transfer Successful":
+                confLabel.config(text="Transfer Successful")
+                transferwin.destroy() 
+            elif conf == "To Account Not Found":
+                confLabel.config(text='To Account Not Found')
+            else:
+                confLabel.config(text='An Error Occured- That\'s all We Know. :(')
+
+        confLabel = tk.Label(transferwin, text="")
+        transferbutton = tk.Button(transferwin, text="Transfer Funds", command=trTransfer)  # Changed transferbuttton to transferbutton
+        
         traTitle.pack()
+        toLabel.pack()
+        toEntry.pack()
+        amountLabel.pack()
+        amountEntry.pack()  
+        transferbutton.pack()  
+
     def update_balance():
         balance_label.config(text=f"BALANCE : £{balance('upd')}")
         client.after(200, update_balance)
@@ -76,4 +106,4 @@ password_entry.pack()
 login_btn.pack()
 root.mainloop()
 
-client_socket.close()  
+client_socket.close()
