@@ -57,6 +57,7 @@ def main(username):
         amountLabel.pack()
         amountEntry.pack()  
         transferbutton.pack()  
+        confLabel.pack()
 
     def update_balance():
         balance_label.config(text=f"BALANCE : £{balance('upd')}")
