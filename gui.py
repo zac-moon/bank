@@ -4,8 +4,14 @@ root = tk.Tk()
 root.title('ZBANK LINK - LOGIN')
 root.geometry('800x600')
 
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server_address = (socket.gethostname(), 12345)
+client_socket.connect(server_address)
+
 def main():
-    print('Main')
+    username = usernameEntry.get()
+    password = passwordEntry.get()
+
 
 mainTitle = tk.Label(root, text="ZBANK LINK - LOGIN", font=('Arial', 40))
 usernameLabel = tk.Label(root, text='Username:')
