@@ -26,7 +26,7 @@ try:
                 mode = input('Enter code: ')
                 if mode == '0':
                     login = False
-                    client_socket.send('0 - Logged Out'.encode('utf-8'))
+                    client_socket.send(f'logout.{username}'.encode('utf-8'))
                     break
                 elif mode == '1':
                     client_socket.send(f'balance.{username}'.encode('utf-8'))

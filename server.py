@@ -79,7 +79,7 @@ while True:
                         client_socket.send('To Account Not Found'.encode('utf-8'))
                     client_socket.send('Transfer Successful'.encode('utf-8'))
             else:
-                print('No more data from', client_address)
+                print(f"{client_address} disconnected.")
                 break
     finally:
         client_socket.close()
