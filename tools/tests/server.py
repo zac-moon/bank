@@ -61,13 +61,7 @@ while True:
                 elif cmd == "transfer":
                     froms = datas[1]
                     amount = datas[2]
-                    if amount == '':
-                        amount = '0'
-                    elif not all(char.isdigit() for char in amount):
-                        amount = '0'
-
                     amount = int(amount)
-
                     to = datas[3]
                     frompath = f'db/balance/{froms}.txt'
                     topath = f'db/balance/{to}.txt'
