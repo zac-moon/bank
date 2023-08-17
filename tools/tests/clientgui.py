@@ -57,48 +57,48 @@ def main(username):
         client.after(200, update_balance)
         print('bal')
 
-    if __name__ == "__main__":
-        root = tk.Tk()
-        root.title('ZBANK LINK - LOGIN')
-        root.geometry('800x600')
+if __name__ == "__main__":
+    root = tk.Tk()
+    root.title('ZBANK LINK - LOGIN')
+    root.geometry('800x600')
         
-        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        server_address = ('192.168.1.71', 12345)
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_address = ('192.168.1.71', 12345)
+    
+    client_socket.connect(server_address)
+    
+    main_title = tk.Label(root, text="ZBANK LINK - LOGIN", font=('Arial', 40))
+    main_title.pack()
         
-        client_socket.connect(server_address)
+    username_label = tk.Label(root, text='Username:')
+    username_label.pack()
         
-        main_title = tk.Label(root, text="ZBANK LINK - LOGIN", font=('Arial', 40))
-        main_title.pack()
+    username_entry = tk.Entry(root)
+    username_entry.pack()
         
-        username_label = tk.Label(root, text='Username:')
-        username_label.pack()
+    password_label = tk.Label(root, text="Password:")
+    password_label.pack()
         
-        username_entry = tk.Entry(root)
-        username_entry.pack()
+    password_entry = tk.Entry(root, show="*")
+    password_entry.pack()
         
-        password_label = tk.Label(root, text="Password:")
-        password_label.pack()
+    def login():
+        username = username_entry.get()
+        password = password_entry.get()
+        client_socket.send(f'login.{username}.{password}'.encode('utf-8'))
+        resp = client_socket.recv(1024).decode('utf-8')
+        if resp == "1":
+            print('Correct Details')
+            main(username)
+        elif resp == "0":
+            print('Account Not Found')
+        else:
+            print('Password Incorrect')
         
-        password_entry = tk.Entry(root, show="*")
-        password_entry.pack()
+    login_btn = tk.Button(root, text="Login", command=login)
+    login_btn.pack()
         
-        def login():
-            username = username_entry.get()
-            password = password_entry.get()
-            client_socket.send(f'login.{username}.{password}'.encode('utf-8'))
-            resp = client_socket.recv(1024).decode('utf-8')
-            if resp == "1":
-                print('Correct Details')
-                main(username)
-            elif resp == "0":
-                print('Account Not Found')
-            else:
-                print('Password Incorrect')
+    root.mainloop()
         
-        login_btn = tk.Button(root, text="Login", command=login)
-        login_btn.pack()
-        
-        root.mainloop()
-        
-        client_socket.close()
+    client_socket.close()
 
