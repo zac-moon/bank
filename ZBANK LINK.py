@@ -5,19 +5,18 @@ root = tk.Tk()
 root.title('ZBANK LINK - LOGIN')
 root.geometry('800x600')
 
-client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_address = ('192.168.1.71', 12345)
-client_socket.connect(server_address)
-
 def main(username):
     def balance(type):
-        if type == 'upd':
-            client_socket.send(f'balance.{username}.upd'.encode('utf-8'))
-        else:
-            client_socket.send(f'balance.{username}'.encode('utf-8'))
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
+            client_socket.connect(server_address)
             
-        balance = client_socket.recv(1024).decode('utf-8')
-        return balance
+            if type == 'upd':
+                client_socket.send(f'balance.{username}.upd'.encode('utf-8'))
+            else:
+                client_socket.send(f'balance.{username}'.encode('utf-8'))
+            
+            balance = client_socket.recv(1024).decode('utf-8')
+            return balance
 
     def transfer():
         print('transfer')
@@ -29,24 +28,25 @@ def main(username):
         toLabel = tk.Label(transferwin, text='Enter Account Username to transfer to: ')
         toEntry = tk.Entry(transferwin)
         amountLabel = tk.Label(transferwin, text='Amount to transfer :')
-        amountEntry = tk.Entry(transferwin) 
+        amountEntry = tk.Entry(transferwin)
 
         def trTransfer():
             print('transfer')
             to = toEntry.get()
             amount = amountEntry.get()
 
-            client_socket.send(f'transfer.{username}.{amount}.{to}'.encode('utf-8'))
-            conf = client_socket.recv(1024)
-            conf = conf.decode('utf-8')
-            print(conf)
-            if conf == "Transfer Successful":
-                confLabel.config(text="Transfer Successful")
-                transferwin.destroy() 
-            elif conf == "To Account Not Found":
-                confLabel.config(text='To Account Not Found')
-            else:
-                confLabel.config(text='An Error Occured- That\'s all We Know. :(')
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
+                client_socket.connect(server_address)
+                client_socket.send(f'transfer.{username}.{amount}.{to}'.encode('utf-8'))
+                conf = client_socket.recv(1024).decode('utf-8')
+                print(conf)
+                if conf == "Transfer Successful":
+                    confLabel.config(text="Transfer Successful")
+                    transferwin.destroy()
+                elif conf == "To Account Not Found":
+                    confLabel.config(text='To Account Not Found')
+                else:
+                    confLabel.config(text='An Error Occurred - That\'s all We Know. :(')
 
         confLabel = tk.Label(transferwin, text="")
         transferbutton = tk.Button(transferwin, text="Transfer Funds", command=trTransfer)  # Changed transferbuttton to transferbutton
@@ -55,14 +55,18 @@ def main(username):
         toLabel.pack()
         toEntry.pack()
         amountLabel.pack()
-        amountEntry.pack()  
-        transferbutton.pack()  
+        amountEntry.pack()
+        transferbutton.pack()
         confLabel.pack()
 
     def update_balance():
-        balance_label.config(text=f"BALANCE : £{balance('upd')}")
-        client.after(200, update_balance)
-        print('bal')
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
+            client_socket.connect(server_address)
+            balance_label.config(text=f"BALANCE : £{balance('upd')}")
+            client.after(200, update_balance)
+            print('bal')
+
+    server_address = ('192.168.1.71', 12345)
 
     client = tk.Toplevel(root)
     client.title(f'ZBANK LINK - {username}')
@@ -82,15 +86,21 @@ def main(username):
 def login():
     username = username_entry.get()
     password = password_entry.get()
-    client_socket.send(f'login.{username}.{password}'.encode('utf-8'))
-    resp = client_socket.recv(1024).decode('utf-8')
-    if resp == "1":
-        print('Correct Details')
-        main(username)
-    elif resp == "0":
-        print('Account Not Found')
-    else:
-        print('Password Incorrect')
+
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
+        client_socket.connect(server_address)
+        client_socket.send(f'login.{username}.{password}'.encode('utf-8'))
+        resp = client_socket.recv(1024).decode('utf-8')
+        
+        if resp == "1":
+            print('Correct Details')
+            main(username)
+        elif resp == "0":
+            print('Account Not Found')
+        else:
+            print('Password Incorrect')
+
+server_address = ('192.168.1.71', 12345)
 
 main_title = tk.Label(root, text="ZBANK LINK - LOGIN", font=('Arial', 40))
 username_label = tk.Label(root, text='Username:')
@@ -106,5 +116,3 @@ password_label.pack()
 password_entry.pack()
 login_btn.pack()
 root.mainloop()
-
-client_socket.close()
