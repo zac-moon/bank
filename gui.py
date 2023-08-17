@@ -10,6 +10,8 @@ server_address = (socket.gethostname(), 12345)
 client_socket.connect(server_address)
 
 def main():
+    print('Logged IN')
+def login():
     username = usernameEntry.get()
     password = passwordEntry.get()
     print(username)
@@ -20,6 +22,7 @@ def main():
     if resp == "1":
         login = True
         print('Correct Details')
+        
     elif resp == "0":
         print('Account Not Found')    
     else:
@@ -30,7 +33,7 @@ usernameLabel = tk.Label(root, text='Username:')
 usernameEntry = tk.Entry(root)
 passwordLabel = tk.Label(root, text="Password:")
 passwordEntry = tk.Entry(root, show="*") 
-loginBtn = tk.Button(root, text="Login", command=main)
+loginBtn = tk.Button(root, text="Login", command=login)
 
 mainTitle.pack()
 usernameLabel.pack()
