@@ -1,12 +1,15 @@
 import tkinter as tk
 import socket
 from ttkthemes import ThemedStyle
+from tkinter import font
+
 root = tk.Tk()
 root.title('ZBANK LINK - LOGIN')
 root.geometry('800x600')
 
 style = ThemedStyle(root)
 style.set_theme("radiance")
+francoisOne = font.Font(family="tools/Francois_One/FrancoisOne-Regular.ttf", size=12)
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_address = ('192.168.1.71', 12345)
@@ -30,11 +33,11 @@ def main(username):
         transferwin.title("ZBANK LINK- TRANSFER")
         transferwin.geometry('400x400')
 
-        traTitle = tk.Label(transferwin, text='Transfer Money')
-        toLabel = tk.Label(transferwin, text='Enter Account Username to transfer to: ')
-        toEntry = tk.Entry(transferwin)
-        amountLabel = tk.Label(transferwin, text='Amount to transfer :')
-        amountEntry = tk.Entry(transferwin) 
+        traTitle = tk.Label(transferwin, text='Transfer Money', font=(francoisOne, 16))
+        toLabel = tk.Label(transferwin, text='Enter Account Username to transfer to: ', font=(francoisOne, 16))
+        toEntry = tk.Entry(transferwin, font=(francoisOne, 16))
+        amountLabel = tk.Label(transferwin, text='Amount to transfer :', font=(francoisOne, 16))
+        amountEntry = tk.Entry(transferwin, font=(francoisOne, 16)) 
 
         def trTransfer():
             print('transfer')
@@ -53,8 +56,8 @@ def main(username):
             else:
                 confLabel.config(text='An Error Occured- That\'s all We Know. :(')
 
-        confLabel = tk.Label(transferwin, text="")
-        transferbutton = tk.Button(transferwin, text="Transfer Funds", command=trTransfer) 
+        confLabel = tk.Label(transferwin, text="", font=(francoisOne, 16))
+        transferbutton = tk.Button(transferwin, text="Transfer Funds", command=trTransfer, font=(francoisOne, 16)) 
 
         traTitle.pack()
         toLabel.pack()
@@ -77,9 +80,9 @@ def main(username):
     client.title(f'ZBANK LINK - {username}')
     client.geometry('800x600')
 
-    balance_label = tk.Label(client, text=f"£{balance('start')}", font=('Arial', 90))
-    transfer_btn = tk.Button(client, text="Transfer", command=transfer, height=6,width=10)
-    logout_btn = tk.Button(client, text="Log Out", command=logout,height=6,width=10)
+    balance_label = tk.Label(client, text=f"£{balance('start')}", font=(francoisOne, 90))
+    transfer_btn = tk.Button(client, text="Transfer", command=transfer, height=6,width=10, font=(francoisOne, 16))
+    logout_btn = tk.Button(client, text="Log Out", command=logout,height=6,width=10, font=(francoisOne, 16))
 
     balance_label.pack()
     transfer_btn.pack()
@@ -102,12 +105,12 @@ def login():
         print('Password Incorrect')
 
 
-main_title = tk.Label(root, text="ZBANK LINK - LOGIN", font=('Arial', 40))
-username_label = tk.Label(root, text='Username:')
-username_entry = tk.Entry(root)
-password_label = tk.Label(root, text="Password:")
-password_entry = tk.Entry(root, show="*")
-login_btn = tk.Button(root, text="Login", command=login)
+main_title = tk.Label(root, text="ZBANK LINK - LOGIN", font=(francoisOne,40))
+username_label = tk.Label(root, text='Username:', font=(francoisOne, 16))
+username_entry = tk.Entry(root, font=(francoisOne, 16))
+password_label = tk.Label(root, text="Password:", font=(francoisOne, 16))
+password_entry = tk.Entry(root, show="*", font=(francoisOne, 16))
+login_btn = tk.Button(root, text="Login", command=login, font=(francoisOne, 16))
 
 main_title.pack()
 username_label.pack()
