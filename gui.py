@@ -51,8 +51,8 @@ def main(username):
                 confLabel.config(text='An Error Occured- That\'s all We Know. :(')
 
         confLabel = tk.Label(transferwin, text="")
-        transferbutton = tk.Button(transferwin, text="Transfer Funds", command=trTransfer)  # Changed transferbuttton to transferbutton
-        
+        transferbutton = tk.Button(transferwin, text="Transfer Funds", command=trTransfer) 
+
         traTitle.pack()
         toLabel.pack()
         toEntry.pack()
@@ -66,17 +66,23 @@ def main(username):
         client.after(200, update_balance)
         print('bal')
 
+    def logout():
+        client_socket.send(f'logout.{username}'.encode('utf-8'))
+        client.destroy()
+
     client = tk.Toplevel(root)
     client.title(f'ZBANK LINK - {username}')
     client.geometry('800x600')
 
     client_title = tk.Label(client, text=f"ZBANK LINK - {username}")
-    balance_label = tk.Label(client, text=f"BALANCE : £{balance('start')}", font=('Arial', 90))
-    transfer_btn = tk.Button(client, text="TRANSFER", command=transfer)
+    balance_label = tk.Label(client, text=f"£{balance('start')}", font=('Arial', 90))
+    transfer_btn = tk.Button(client, text="Transfer", command=transfer, height=6,width=10)
+    logout_btn = tk.Button(client, text="Log Out", command=logout,height=6,width=10)
 
     client_title.pack()
     balance_label.pack()
     transfer_btn.pack()
+    logout_btn.pack()
 
     balance('start')
     update_balance()
