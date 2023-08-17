@@ -10,6 +10,8 @@ server_address = ('192.168.1.71', 12345)
 client_socket.connect(server_address)
 
 def main(username):
+    username_entry.delete(0, tk.END)
+    password_entry.delete(0, tk.END)
     def balance(type):
         if type == 'upd':
             client_socket.send(f'balance.{username}.upd'.encode('utf-8'))
