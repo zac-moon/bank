@@ -60,11 +60,11 @@ def main(username):
         amountEntry.pack()  
         transferbutton.pack()  
         confLabel.pack()
-
-    def update_balance():
+    
+    def update_balance(rast):
         balance_label.config(text=f"BALANCE : £{balance('upd')}")
-        client.after(200, update_balance)
-        print('bal')
+        client.after(200, update_balance, rast + 1)
+        print('bal', rast)
 
     def logout():
         client_socket.send(f'logout.{username}'.encode('utf-8'))
@@ -85,7 +85,7 @@ def main(username):
     logout_btn.pack()
 
     balance('start')
-    update_balance()
+    update_balance(0)
 
 def login():
     username = username_entry.get()
