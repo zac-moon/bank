@@ -1,3 +1,0 @@
-([('ZBANK LINK v1.0 Stable',
-   '/Users/paulmoon/Desktop/zacmoon/bank/dist/ZBANK LINK v1.0 Stable',
-   'EXECUTABLE')],)
